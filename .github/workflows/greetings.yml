@@ -1,0 +1,33 @@
+name: Greetings
+
+on: [pull_request_target, issues]
+
+jobs:
+  greeting:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+    steps:
+      - name: Set Variables
+        id: vars
+        run: |
+          echo "USERNAME=${{ github.event.sender.login }}" >> $GITHUB_ENV
+          echo "OWNER=${{ github.repository_owner }}" >> $GITHUB_ENV
+
+      - name: Check if Contributor
+        id: check_contributor
+        run: |
+          if [[ "${{ github.event.sender.login }}" != "${{ github.repository_owner }}" ]]; then
+              echo "::set-output name=is_contributor::true"
+          else
+              echo "::set-output name=is_contributor::false"
+          fi
+
+      - name: Greet User
+        if: steps.check_contributor.outputs.is_contributor == 'true' # Only runs if the user is a contributor
+        uses: actions/first-interaction@v1
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          issue-message: "Thank you @${{ github.event.sender.login }} for bringing up this issue to help enhance our project even further! We'll review it soon. 🙌❤️"
+          pr-message: "Thank you for opening a pull request @${{ github.event.sender.login }}. We'll review it as soon as possible 🙌❤️"
