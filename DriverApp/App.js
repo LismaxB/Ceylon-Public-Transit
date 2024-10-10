@@ -8,6 +8,8 @@ import * as Location from 'expo-location';
 export default function App() {
     console.log("Starting App");
 
+    let isRideStarted = false;
+
     const signIn = async (email, password) => {
         const { data: { session }, error } = await supabase.auth.signInWithPassword({
             email,
@@ -66,16 +68,18 @@ export default function App() {
     };
 
     const handleSendLocation = async () => {
-        const location = await getLocation();
         const accessToken = await signIn('user@example.com', 'yourpassword');
 
-        if (location && accessToken) {
-            await sendLocationToBackend(location.latitude, location.longitude, accessToken);
+        if (accessToken) {
+            setInterval(async () => {
+                const location = await getLocation();
+                if (location && isRideStarted) {
+                    await sendLocationToBackend(location.latitude, location.longitude, accessToken);
+                }
+            }, 5000); // Send every 5 seconds
         }
     };
     
-
-    let isRideStarted = false;
 
     function startRide() {
         console.log('Starting Ride');
@@ -87,7 +91,7 @@ export default function App() {
 
     function endRide() {
         if (isRideStarted) {
-            Alert.alert('Are you sure?', 'Do you want to end the ride?', [{ text: 'Yes', onPress: () => {console.log('Ending Ride'); isRideStarted = false;} }, { text: 'No' }]);
+            Alert.alert('Are you sure?', 'Do you want to end the ride?', [{ text: 'Yes', onPress: () => {console.log('Ride Ended'); isRideStarted = false;} }, { text: 'No' }]);
             console.log('Ending Ride');
         }
         // alert('Ending Ride');
