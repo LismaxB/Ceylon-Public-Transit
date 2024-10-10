@@ -1,1 +1,21 @@
-{"name":"DriverApp","version":"0.0.1","private":true,"scripts":{"start":"node node_modules/react-native/local-cli/cli.js start"},"dependencies":{"@react-native-community/masked-view":"^0.1.11","@react-navigation/native":"^6.1.18","@react-navigation/stack":"^6.4.1","@supabase/supabase-js":"^2.45.4","react-native":"0.75.4","react-native-gesture-handler":"^2.20.0","react-native-reanimated":"^3.15.4","react-native-safe-area-context":"^4.11.0","react-native-screens":"^3.34.0"}}
+{
+  "name": "driverapp",
+  "version": "1.0.0",
+  "main": "expo/AppEntry.js",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web"
+  },
+  "dependencies": {
+    "expo": "~51.0.28",
+    "expo-status-bar": "~1.12.1",
+    "react": "18.2.0",
+    "react-native": "0.74.5"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.20.0"
+  },
+  "private": true
+}
