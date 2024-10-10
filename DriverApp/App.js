@@ -1,10 +1,26 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, SafeAreaView, Button, Alert, Pressable } from 'react-native';
 
+import { supabase } from './supabaseClient';
+
 import * as Location from 'expo-location';
 
 export default function App() {
-    console.log('Starting Application');
+    console.log("Starting App");
+
+    const signIn = async (email, password) => {
+        const { data: { session }, error } = await supabase.auth.signInWithPassword({
+            email,
+            password,
+        });
+    
+        if (error) {
+            console.error('Error signing in:', error.message);
+        } else {
+            console.log('Session:', session); // Contains access_token
+            return session.access_token;
+        }
+    };
 
     const requestLocationPermission = async () => {
         let { status } = await Location.requestForegroundPermissionsAsync();
@@ -26,12 +42,45 @@ export default function App() {
         };
     };
 
+    const sendLocationToBackend = async (latitude, longitude, accessToken) => {
+        const response = await fetch(`${process.env.EXPO_PUBLIC_SUPABASE_URL}/rest/v1/Driver Locations`, {
+            method: 'POST',
+            headers: {
+                'apikey': process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY,
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                latitude,
+                longitude,
+                timestamp: new Date().toISOString(),
+                driver_id: 1,  // Genarate this!
+            }),
+        });
+    
+        if (!response.ok) {
+            console.error('Failed to send location:', response.statusText);
+        } else {
+            console.log('Location sent successfully');
+        }
+    };
+
+    const handleSendLocation = async () => {
+        const location = await getLocation();
+        const accessToken = await signIn('user@example.com', 'yourpassword');
+
+        if (location && accessToken) {
+            await sendLocationToBackend(location.latitude, location.longitude, accessToken);
+        }
+    };
+    
+
     let isRideStarted = false;
 
     function startRide() {
         console.log('Starting Ride');
         isRideStarted = true;
-        console.log(getLocation());
+        console.log(handleSendLocation());
         // Alert.alert('Are you sure?', 'Do you want to start the ride?', [{ text: 'Yes'}, { text: 'No' }]);
         // alert('Starting Ride');
     }
