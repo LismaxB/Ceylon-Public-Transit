@@ -26,7 +26,18 @@ export default function App() {
     };
 
     fetchBusData();
-    
+
+    // const fetchRoute = async () => {
+    //   const { data, error } = await supabase
+    //     .from('Routes')
+    //     .select('*');
+      
+    //   if (!error) {
+    //     setRoute(data[0].AtoBstops);
+    //   }
+    // };
+
+    // fetchRoute();
 
     // Optionally, set an interval to update buses every X seconds
     const intervalId = setInterval(fetchBusData, 5000); // update every 5 seconds
@@ -39,8 +50,8 @@ export default function App() {
       <MapView
         style={{ flex: 1 }}
         initialRegion={{
-          latitude: 7.8731,  // Default latitude (Sri Lanka)
-          longitude: 80.7718, // Default longitude (Sri Lanka)
+          latitude: 7,  // Default latitude (Sri Lanka, Colombo)
+          longitude: 79.8612, // Default longitude (Sri Lanka, Colombo)
           latitudeDelta: 0.5,
           longitudeDelta: 0.5,
         }}
