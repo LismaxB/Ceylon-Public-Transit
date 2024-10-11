@@ -39,7 +39,7 @@ function App() {
         .select('*');
       
       if (!error) {
-        setRoute(data[0].stops);
+        setRoute(data[0].AtoBstops);
       }
     };
 
