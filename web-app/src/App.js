@@ -1,23 +1,42 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from 'react';
+import MapComponent from './MapComponent';
+import { createClient } from '@supabase/supabase-js';
+
+console.log(process.env.SUPABASE_URL);
+
+const supabase = createClient(
+  process.env.REACT_APP_SUPABASE_URL, 
+  process.env.REACT_APP_SUPABASE_ANON_KEY
+);
 
 function App() {
+  const [driverLocations, setDriverLocations] = useState([]);
+
+  // Fetch driver locations from Supabase
+  useEffect(() => {
+    const fetchDriverLocations = async () => {
+      const { data, error } = await supabase
+        .from('Driver Locations')
+        .select('*');
+      
+      if (!error) {
+        setDriverLocations(data);
+      }
+    };
+
+    fetchDriverLocations();
+
+    // // Fetch every 5 seconds
+    // const intervalId = setInterval(fetchDriverLocations, 5000);
+
+    // // Clean up the interval on component unmount
+    // return () => clearInterval(intervalId);
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h1>Driver Location Tracking</h1>
+      <MapComponent driverLocations={driverLocations} />
     </div>
   );
 }
