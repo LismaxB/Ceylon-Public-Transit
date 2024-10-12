@@ -71,10 +71,10 @@ export default function App() {
         style={{ flex: 1 }}
         mapType="mutedStandard"
         initialRegion={{
-          latitude: 7,  // Default latitude (Sri Lanka, Colombo)
-          longitude: 79.8612, // Default longitude (Sri Lanka, Colombo)
-          latitudeDelta: 0.5,
-          longitudeDelta: 0.5,
+          latitude: 6.9,  // Default latitude (Sri Lanka, Colombo)
+          longitude: 79.93, // Default longitude (Sri Lanka, Colombo)
+          latitudeDelta: 0.2,
+          longitudeDelta: 0.2,
         }}
       >
         {buses.map(bus => (
