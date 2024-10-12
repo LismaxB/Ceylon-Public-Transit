@@ -85,6 +85,7 @@ export default function App() {
               longitude: bus.longitude,
             }}
             title={`Bus ${bus.driver_id}`}
+            anchor={{ x: 0.5, y: 0.5 }} // Set the anchor point to the center
           >
             <Image
               source={require('./assets/bus.webp')} // Custom marker image
