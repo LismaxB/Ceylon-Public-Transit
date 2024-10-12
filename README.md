@@ -68,8 +68,5 @@ For questions, ideas, or suggestions, feel free to open an issue or reach out di
 ## 🧑‍💻 Contributors
 Lisara Yatiwala (LismaxB) - Project Founder and Lead Developer
 
-## 📬 Contact
-If you have any questions, feel free to reach out through GitHub Issues me.
-
 ## 🌍 Let's Make Public Transit Smarter Together!
 Join us on this exciting mission to make public transport in Sri Lanka more accessible and efficient for everyone. Let’s build something great! 💡✨
