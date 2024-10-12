@@ -30,7 +30,7 @@ export default function App() {
       .select('*');
     
     if (!error) {
-      console.log(data[0].AtoBstops);
+      // console.log(data[0].AtoBstops);
       try {
         for(let i = 0; i < data[0].AtoBstops.length; i++) {
           const response = await fetch(`https://router.project-osrm.org/route/v1/driving/${data[0].AtoBstops[i].longitude},${data[0].AtoBstops[i].latitude};${data[0].AtoBstops[i+1].longitude},${data[0].AtoBstops[i+1].latitude}?overview=full&geometries=geojson`);
