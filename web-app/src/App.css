@@ -36,3 +36,17 @@
     transform: rotate(360deg);
   }
 }
+
+
+/* map */
+.leaflet-container{
+  height: 100vh;
+}
+.leaflet-popup-content{
+  width: auto !important;
+}
+
+iframe
+{
+    display: none;
+}
