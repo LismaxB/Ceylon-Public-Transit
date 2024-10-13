@@ -54,7 +54,7 @@ function App() {
       table: 'DriverLocations',
     }, (payload) => {
       console.log('Change received!', payload);
-      // fetchDriverLocations();
+      fetchDriverLocations();
     }).subscribe();
 
     const fetchRoute = async () => {
