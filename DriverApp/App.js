@@ -45,7 +45,7 @@ export default function App() {
     };
 
     const sendLocationToBackend = async (latitude, longitude, accessToken) => {
-        const response = await fetch(`${process.env.EXPO_PUBLIC_SUPABASE_URL}/rest/v1/Driver Locations`, {
+        const response = await fetch(`${process.env.EXPO_PUBLIC_SUPABASE_URL}/rest/v1/DriverLocations`, {
             method: 'POST',
             headers: {
                 'apikey': process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY,
