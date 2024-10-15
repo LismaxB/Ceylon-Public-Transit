@@ -1,14 +1,5 @@
 # Security Policy
 
-## Supported Versions
-
-We currently provide support for the following versions:
-
-| Version | Supported          |
-| ------- | ------------------ |
-| 1.x     | ✅ Fully supported  |
-| < 1.x   | ❌ No longer supported |
-
 ## Reporting a Vulnerability
 
 If you discover a security vulnerability in this project, we appreciate your help in responsibly disclosing it. To ensure the safety of the project and its users, please follow these steps:
