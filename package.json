@@ -1,25 +1,7 @@
 {
-  "name": "ceylon-public-transit",
-  "description": "Ceylon Public Transit is an open-source project in development, focused on transforming public transportation in Sri Lanka. It offers real-time bus tracking to help users monitor bus locations and schedules. Future features include route planning, arrival notifications, and comprehensive bus service info. Contributions are welcome!",
-  "version": "1.0.0",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/LismaxB/Ceylon-Public-Transit.git"
-  },
-  "keywords": [
-    "Ceylon-Public-Transit"
-  ],
-  "author": "LismaxB",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/LismaxB/Ceylon-Public-Transit/issues"
-  },
-  "homepage": "https://github.com/LismaxB/Ceylon-Public-Transit#readme",
   "dependencies": {
-    "@supabase/supabase-js": "^2.45.4"
+    "@supabase/supabase-js": "^2.45.4",
+    "csv-parser": "^3.0.0",
+    "dotenv": "^16.4.5"
   }
 }
