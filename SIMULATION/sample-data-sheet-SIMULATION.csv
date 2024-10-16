@@ -1,4 +1,4 @@
-date_time,bus_number,Bus rating,Weather,bus_type,longitude,latitude,Hours,Minitues,Seconds
+date_time,bus_number,Bus rating,Weather,bus_type,latitude,longitude,Hours,Minitues,Seconds
 2/18/2020 12:04,NC - 5210,4.5,32,Normal,8.3590491,80.513081,12,4,4
 2/18/2020 12:04,NC - 5210,4.5,32,Normal,8.3590484,80.5130795,12,4,15
 2/18/2020 12:04,NC - 5210,4.5,32,Normal,8.3590496,80.5130801,12,4,25
