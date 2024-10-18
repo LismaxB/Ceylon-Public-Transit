@@ -5,9 +5,18 @@ import { MapContainer, Marker, TileLayer, Popup } from "react-leaflet";
 import { LatLngExpression, LatLngTuple } from "leaflet";
 import L, { Icon } from "leaflet";
 
+// Extend Leaflet to include Routing
+import "leaflet-routing-machine";
+declare module "leaflet" {
+  namespace Routing {
+    function control(options: any): any;
+  }
+}
+
 import "leaflet/dist/leaflet.css";
 import "leaflet-defaulticon-compatibility";
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css";
+import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
 
 import { createClient } from "@supabase/supabase-js";
 
@@ -23,8 +32,10 @@ interface MapProps {
 }
 
 const MapComponent = (Map: MapProps) => {
+  const [map, setMap] = useState<L.Map | null>(null);
   const [busData, setBusData] = useState<any[]>([]);
   const [busMarkers, setBusMarkers] = useState<JSX.Element[]>([]);
+  const [routingMachine, setRoutingMachine] = useState(null);
 
   const busIcon = new Icon({
     iconUrl: "./images/icons/bus.webp",
@@ -32,7 +43,7 @@ const MapComponent = (Map: MapProps) => {
   });
 
   const markericon = L.icon({
-    iconUrl: "./marker.webp",
+    iconUrl: "./images/icons/marker.webp",
     iconSize: [30, 30],
   });
 
@@ -101,12 +112,84 @@ const MapComponent = (Map: MapProps) => {
     };
   }, []);
 
+  useEffect(() => {
+    if (!map) return;
+
+    const fetchRoute = async () => {
+      const { data, error } = await supabase.from("Routes").select("*");
+
+      if (error) {
+        console.error("Error fetching route data:", error);
+        return;
+      }
+
+      if (!data || data.length === 0) {
+        console.error("No route data available");
+        return;
+      }
+
+      const route = data[0].AtoBstops;
+
+      // Remove existing routing control before adding a new one
+      if (routingMachine) {
+        map.removeControl(routingMachine);
+      }
+
+      // Create new routing control
+      const routeStops = route.map(
+        (point: { latitude: number; longitude: number }) =>
+          L.latLng(point.latitude, point.longitude)
+      );
+
+      const routingControl = L.Routing.control({
+        waypoints: routeStops,
+        createMarker: function (
+          i: number,
+          waypoint: { latLng: LatLngExpression },
+          nWps: number
+        ) {
+          let icon;
+          if (i === 0 || i === nWps - 1) {
+            // Start and end marker
+            icon = markericon;
+          } else {
+            // Intermediate stop markers
+            icon = L.icon({
+              iconUrl: "./images/icons/stop.webp",
+              iconSize: [15, 15], // Adjust icon size if needed
+            });
+          }
+          return L.marker(waypoint.latLng, {
+            draggable: false,
+            icon: icon,
+          });
+        },
+        lineOptions: {
+          styles: [{ color: "#FF6666", weight: 4 }],
+        },
+      });
+
+      routingControl.addTo(map);
+      setRoutingMachine(routingControl);
+    };
+
+    fetchRoute();
+
+    // Clean up on component unmount or when route/map changes
+    return () => {
+      if (routingMachine) {
+        map.removeControl(routingMachine);
+      }
+    };
+  }, [map]);
+
   return (
     <MapContainer
       center={[6.9, 79.94]}
       zoom={13}
       scrollWheelZoom={true}
       style={{ height: "100vh", width: "100%" }}
+      ref={setMap}
     >
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
