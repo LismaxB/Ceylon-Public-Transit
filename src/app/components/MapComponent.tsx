@@ -59,6 +59,10 @@ const MapComponent = (Map: MapProps) => {
       if (error) {
         console.log({ error: error.message });
       }
+
+      // Clear the busMap
+      Object.keys(busMap).forEach((key) => delete busMap[key]);
+
       data?.forEach((bus) => {
         if (
           !busMap[bus.driver_id] ||
