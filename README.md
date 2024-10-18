@@ -1,6 +1,6 @@
-# 🌍 Ceylon Public Transit - Open Source Bus Location Tracker 🚍
+<h1 align='center'>🌍 Ceylon Public Transit - Open Source Bus Location Tracker 🚍</h1>
 
-Welcome to **Ceylon Public Transit**, an open-source initiative aimed at revolutionizing public transport for the people of Sri Lanka! Our project aims to provide real-time bus tracking, making your daily commute smoother and more efficient. With a **Driver App** and a **Client Web Application**, we're building the future of public transit with the help of the open-source community. 🌟
+Welcome to **Ceylon Public Transit**, an open-source initiative aimed at revolutionizing public transport for the people of Sri Lanka! Our project aims to provide real-time bus tracking, making your daily commute smoother and more efficient, we're building the future of public transit with the help of the open-source community. 🌟
 
 ---
 
@@ -52,6 +52,10 @@ We welcome contributions to this project! Whether you're a developer, designer, 
 3. **Submit a pull request** with your contributions.
 
 Make sure to check out our [contribution guidelines](CONTRIBUTING.md) to follow the best practices.
+
+## 🔄 Versioning and Releases
+
+The project is actively being developed, and we plan to release v1.0.0 soon.
 
 ## 📝 License
 
