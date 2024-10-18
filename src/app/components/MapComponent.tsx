@@ -9,6 +9,14 @@ import "leaflet/dist/leaflet.css";
 import "leaflet-defaulticon-compatibility";
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css";
 
+import { createClient } from "@supabase/supabase-js";
+
+// Initialize the Supabase client
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL as string,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string
+);
+
 interface MapProps {
   posix: LatLngExpression | LatLngTuple;
   zoom: number;
@@ -28,15 +36,30 @@ const MapComponent = (Map: MapProps) => {
     iconSize: [30, 30],
   });
 
-  useEffect(() => {
-    const fetchBusData = async () => {
-      try {
-        const response = await fetch("/api/realtimeBusData");
-        const data = await response.json();
-        setBusData(data);
+  const busMap: { [key: string]: any } = {};
 
-        // Set markers based on the fetched bus data
-        const markers = data.map(
+  useEffect(() => {
+    async function fetchBusData() {
+      const { data, error } = await supabase
+        .from("DriverLocations")
+        .select("*")
+        .order("timestamp", { ascending: false });
+
+      if (error) {
+        console.log({ error: error.message });
+      }
+      data?.forEach((bus) => {
+        if (
+          !busMap[bus.driver_id] ||
+          new Date(bus.timestamp) > new Date(busMap[bus.driver_id].timestamp)
+        ) {
+          busMap[bus.driver_id] = bus; // Keep the latest location
+        }
+      });
+      const BusData = Object.values(busMap); // Convert the map back to an array
+
+      const markers =
+        BusData?.map(
           (driver: {
             driver_id: string;
             latitude: number;
@@ -52,16 +75,28 @@ const MapComponent = (Map: MapProps) => {
               </Popup>
             </Marker>
           )
-        );
-        setBusMarkers(markers);
-      } catch (err) {
-        console.error("Error fetching bus data:", err);
-      }
-    };
+        ) || [];
+      setBusMarkers(markers);
+    }
 
     fetchBusData();
-
+    // Subscribe to real-time updates for driver locations
+    const subscription = supabase
+      .channel("real-time-bus-updates")
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "*",
+          table: "DriverLocations",
+        },
+        (payload) => {
+          fetchBusData();
+        }
+      )
+      .subscribe();
     return () => {
+      subscription.unsubscribe();
       setBusMarkers([]);
     };
   }, []);
