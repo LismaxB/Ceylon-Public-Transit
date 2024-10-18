@@ -143,6 +143,9 @@ const MapComponent = (Map: MapProps) => {
 
       const routingControl = L.Routing.control({
         waypoints: routeStops,
+        routeWhileDragging: false,
+        addWaypoints: false,
+        name: data[0].route_name,
         createMarker: function (
           i: number,
           waypoint: { latLng: LatLngExpression },
