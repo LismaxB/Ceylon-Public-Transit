@@ -1,15 +1,21 @@
 "use client";
 import React, { useEffect, useState } from "react";
 
-import { MapContainer, Marker, TileLayer, Popup } from "react-leaflet";
+import { MapContainer, TileLayer, Popup } from "react-leaflet";
 import { LatLngExpression, LatLngTuple } from "leaflet";
-import L, { Icon } from "leaflet";
+import L, { Icon, Marker } from "leaflet";
+
+import "leaflet.marker.slideto";
 
 // Extend Leaflet to include Routing
 import "leaflet-routing-machine";
 declare module "leaflet" {
   namespace Routing {
     function control(options: any): any;
+  }
+
+  interface Marker {
+    slideTo(latlng: LatLngExpression, options?: any): this;
   }
 }
 
@@ -34,7 +40,6 @@ interface MapProps {
 const MapComponent = (Map: MapProps) => {
   const [map, setMap] = useState<L.Map | null>(null);
   const [busData, setBusData] = useState<any[]>([]);
-  const [busMarkers, setBusMarkers] = useState<JSX.Element[]>([]);
   const [routingMachine, setRoutingMachine] = useState(null);
 
   const busIcon = new Icon({
@@ -47,51 +52,75 @@ const MapComponent = (Map: MapProps) => {
     iconSize: [30, 30],
   });
 
-  const busMap: { [key: string]: any } = {};
+  const busMap: { [key: string]: { marker: L.Marker; data: any } } = {};
 
   useEffect(() => {
     async function fetchBusData() {
       const { data, error } = await supabase
         .from("DriverLocations")
         .select("*")
-        .order("timestamp", { ascending: false });
+        .order("timestamp", { ascending: false }); // This ensures that we get the most recent locations first
 
       if (error) {
         console.log({ error: error.message });
+        return;
       }
 
-      // Clear the busMap
-      Object.keys(busMap).forEach((key) => delete busMap[key]);
+      // Create a set of current driver IDs
+      const currentDrivers = new Set(data?.map((bus) => bus.driver_id));
 
-      data?.forEach((bus) => {
-        if (
-          !busMap[bus.driver_id] ||
-          new Date(bus.timestamp) > new Date(busMap[bus.driver_id].timestamp)
-        ) {
-          busMap[bus.driver_id] = bus; // Keep the latest location
+      // Remove drivers not in the current data
+      Object.keys(busMap).forEach((driverId) => {
+        if (!currentDrivers.has(driverId) && map) {
+          // Remove the marker from the map
+          map.removeLayer(busMap[driverId].marker);
+          delete busMap[driverId]; // Remove from busMap
         }
       });
-      const BusData = Object.values(busMap); // Convert the map back to an array
 
-      const markers =
-        BusData?.map(
-          (driver: {
-            driver_id: string;
-            latitude: number;
-            longitude: number;
-          }) => (
-            <Marker
-              key={driver.driver_id}
-              position={[driver.latitude, driver.longitude]}
-              icon={busIcon}
-            >
-              <Popup>
-                {driver.driver_id ? `Driver: ${driver.driver_id}` : "Bus"}
-              </Popup>
-            </Marker>
-          )
-        ) || [];
-      setBusMarkers(markers);
+      // Store the latest location for each driver
+      const latestBusData: { [key: string]: any } = {};
+
+      data?.forEach((bus) => {
+        const { driver_id, latitude, longitude } = bus;
+
+        // If the driver ID already exists, only keep the most recent one
+        if (
+          !latestBusData[driver_id] ||
+          new Date(bus.timestamp) > new Date(latestBusData[driver_id].timestamp)
+        ) {
+          latestBusData[driver_id] = bus; // Store the latest location based on timestamp
+        }
+      });
+
+      // Update the map with the latest data
+      Object.values(latestBusData).forEach((bus) => {
+        const { driver_id, latitude, longitude } = bus;
+        const busLatLng = L.latLng(latitude, longitude);
+
+        // Check if the driver already exists in the busMap
+        if (busMap[driver_id]) {
+          // If the location has changed, slide the marker to the new location
+          if (
+            busMap[driver_id].data.latitude !== latitude ||
+            busMap[driver_id].data.longitude !== longitude
+          ) {
+            busMap[driver_id].marker.slideTo(busLatLng, {
+              duration: 3000, // Adjust animation duration as needed
+            });
+          }
+          // Update the stored data
+          busMap[driver_id].data = bus; // Keep the latest data
+        } else {
+          // Create a new marker for the new driver location
+          if (!map) return;
+          const marker = L.marker(busLatLng, { icon: busIcon })
+            .addTo(map)
+            .bindPopup(`Driver: ${driver_id}`);
+          // Store the marker and data in busMap
+          busMap[driver_id] = { marker, data: bus };
+        }
+      });
     }
 
     fetchBusData();
@@ -112,9 +141,8 @@ const MapComponent = (Map: MapProps) => {
       .subscribe();
     return () => {
       subscription.unsubscribe();
-      setBusMarkers([]);
     };
-  }, []);
+  }, [map]);
 
   useEffect(() => {
     if (!map) return;
@@ -202,7 +230,6 @@ const MapComponent = (Map: MapProps) => {
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
       />
-      {busMarkers}
     </MapContainer>
   );
 };
