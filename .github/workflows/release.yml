@@ -1,0 +1,32 @@
+name: Create release on patch version
+
+on:
+  push:
+    tags:
+      - 'v*.*.[1-9]+'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Release patch version
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+
+      - name: Create release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ github.ref_name }}
+        run: |
+          gh release create "$tag" \
+            --repo="$GITHUB_REPOSITORY" \
+            --title="${tag#v}" \
+            --generate-notes
+
+      - name: Update version in package.json
+        run: |
+          npm version patch
+          git push --follow-tags
