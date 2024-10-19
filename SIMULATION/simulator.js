@@ -5,8 +5,8 @@ const { createClient } = require('@supabase/supabase-js');
 require('dotenv').config();
 
 // Initialize Supabase client
-const supabaseUrl = process.env.SUPABASE_URL;
-const supabaseKey = process.env.SUPABASE_ANON_KEY;
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 // Load the CSV data
@@ -31,14 +31,20 @@ fs.createReadStream('./SIMULATION/sample-data-sheet-SIMULATION.csv')
 // Send updates to Supabase every 5 seconds
 let index = 0;
 
-async function sendLocationUpdate(location, totalUpdates) {
+async function getBusId() {
+  const { data, error } = await supabase.from('BusData').select('id').eq('bus_number', 'SIMULATOR');
+  if (error) console.error(error);
+  else return data[0].id;
+};
+
+async function sendLocationUpdate(location, totalUpdates, busId) {
   await supabase
     .from('DriverLocations')
     .insert([
       {
         driver_id: location.driver_id,
          // bus_number: location.bus_number,
-        bus_type: location.bus_type,
+        bus_id: busId,
         latitude: location.lat,
         longitude: location.lng,
         timestamp: new Date().toISOString(),
@@ -50,17 +56,19 @@ async function sendLocationUpdate(location, totalUpdates) {
   displayLoadingAnimation(percentage, location);
 }
 
-function simulateLocationUpdates() {
+async function simulateLocationUpdates() {
   const totalUpdates = route.length;
-  let locationInterval = setInterval(() => {
-    if (index < totalUpdates) {
-      sendLocationUpdate(route[index], totalUpdates);
-      index++;
-    } else {
-      clearInterval(locationInterval);
-      console.log('Simulation finished.');
-    }
-  }, 5000);
+  await getBusId().then((busId) => {
+    let locationInterval = setInterval(() => {
+      if (index < totalUpdates) {
+        sendLocationUpdate(route[index], totalUpdates, busId);
+        index++;
+      } else {
+        clearInterval(locationInterval);
+        console.log('Simulation finished.');
+      }
+    }, 5000);
+  });
 }
 
 // Loading animation with percentage and last sent location
