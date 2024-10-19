@@ -44,27 +44,36 @@ export default function App() {
         };
     };
 
+    async function getBusId() {
+        const { data, error } = await supabase.from('BusData').select('id').eq('bus_number', 'NC-SAMPLE');
+        if (error) console.error(error);
+        else return data[0].id;
+      };
+
     const sendLocationToBackend = async (latitude, longitude, accessToken) => {
-        const response = await fetch(`${process.env.EXPO_PUBLIC_SUPABASE_URL}/rest/v1/DriverLocations`, {
-            method: 'POST',
-            headers: {
-                'apikey': process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY,
-                'Authorization': `Bearer ${accessToken}`,
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                latitude,
-                longitude,
-                timestamp: new Date().toISOString(),
-                driver_id: 1,  // Genarate this!
-            }),
+        await getBusId().then(async(busId) => {
+            const response = await fetch(`${process.env.EXPO_PUBLIC_SUPABASE_URL}/rest/v1/DriverLocations`, {
+                method: 'POST',
+                headers: {
+                    'apikey': process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY,
+                    'Authorization': `Bearer ${accessToken}`,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    latitude,
+                    longitude,
+                    timestamp: new Date().toISOString(),
+                    driver_id: 1,  // Genarate this!
+                    bus_id: busId,
+                }),
+            });
+        
+            if (!response.ok) {
+                console.error('Failed to send location:', response.statusText);
+            } else {
+                console.log('Location sent successfully');
+            }
         });
-    
-        if (!response.ok) {
-            console.error('Failed to send location:', response.statusText);
-        } else {
-            console.log('Location sent successfully');
-        }
     };
 
     const handleSendLocation = async () => {
