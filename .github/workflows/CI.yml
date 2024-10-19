@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  pull_request:
+    branches: main
+  push:
+    branches: main
+  merge_group: {}
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20.x   
+
+          registry-url: 'https://registry.npmjs.org'
+          cache: npm
+
+      - name: Install
+        run: npm install
+
+      - name: Build
+        run: npm run build
+
+      # - name: Lint
+      #   run: npm run lint
+
+      # - name: Test
+      #   run: npm run test
+
+      # - name: Typecheck
+      #   run: npm run typecheck
