@@ -16,6 +16,7 @@
     "leaflet-defaulticon-compatibility": "^0.1.2",
     "leaflet-geosearch": "^4.0.0",
     "leaflet-routing-machine": "^3.2.12",
+    "leaflet.marker.slideto": "^0.3.0",
     "next": "14.2.15",
     "react": "^18",
     "react-dom": "^18",
