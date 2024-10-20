@@ -9,7 +9,10 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@radix-ui/react-slot": "^1.1.0",
     "@supabase/supabase-js": "^2.45.4",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.1",
     "csv-parser": "^3.0.0",
     "dotenv": "^16.4.5",
     "leaflet": "^1.9.4",
@@ -17,10 +20,13 @@
     "leaflet-geosearch": "^4.0.0",
     "leaflet-routing-machine": "^3.2.12",
     "leaflet.marker.slideto": "^0.3.0",
+    "lucide-react": "^0.453.0",
     "next": "14.2.15",
     "react": "^18",
     "react-dom": "^18",
     "react-leaflet": "^4.2.1",
+    "tailwind-merge": "^2.5.4",
+    "tailwindcss-animate": "^1.0.7",
     "ws": "^8.18.0"
   },
   "devDependencies": {
