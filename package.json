@@ -9,12 +9,14 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@lottiefiles/react-lottie-player": "^3.5.4",
     "@radix-ui/react-slot": "^1.1.0",
     "@supabase/supabase-js": "^2.45.4",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "csv-parser": "^3.0.0",
     "dotenv": "^16.4.5",
+    "framer-motion": "^11.11.9",
     "leaflet": "^1.9.4",
     "leaflet-defaulticon-compatibility": "^0.1.2",
     "leaflet-geosearch": "^4.0.0",
