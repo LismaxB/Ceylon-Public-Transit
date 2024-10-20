@@ -6,12 +6,14 @@ import { Button } from "@/components/ui/button";
 const NavBar = () => {
   return (
     <div className="flex w-full justify-between items-center py-6 px-12 border-b-2 border-solid border-[#DDDDDD]">
-      <Image
-        src="/images/logo/Ceylon-Public-Tansit-Logo.png"
-        alt="Ceylon Public Transit"
-        width={200}
-        height={20}
-      />
+      <Link href="/">
+        <Image
+          src="/images/logo/Ceylon-Public-Tansit-Logo.png"
+          alt="Ceylon Public Transit"
+          width={200}
+          height={20}
+        />
+      </Link>
       <div className="flex gap-6 items-center">
         <a href="https://github.com/LismaxB/Ceylon-Public-Transit">
           <svg viewBox="0 0 438.549 438.549" className="h-8 w-8">
