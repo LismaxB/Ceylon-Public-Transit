@@ -1,4 +1,5 @@
 import dynamic from "next/dynamic";
+import NavBar from "./components/Navbar";
 
 export default function Home() {
   const Map = dynamic(() => import("./components/MapComponent"), {
@@ -7,11 +8,7 @@ export default function Home() {
   });
   return (
     <main className="">
-      <h1 className="text-4xl font-bold">Ceylon Public Transit</h1>
-      <p className="text-lg">
-        An open-source initiative to revolutionize public transport in Sri
-        Lanka.
-      </p>
+      <NavBar />
       <Map posix={[6.9, 79.94]} zoom={13} />
     </main>
   );
