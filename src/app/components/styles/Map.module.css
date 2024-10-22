@@ -57,3 +57,56 @@
     text-align: left;
     color:#999;
 }
+
+.busCard{
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    background-color: #fff;
+    margin-left: 1rem;
+    margin-right: 1rem;
+}
+
+.busCardInnerTop{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1rem;
+}
+
+.busCardCBadge{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* background-color: #f0f0f0; */
+    color: #333;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    gap: 0.5rem;
+}
+
+.busCardNOBadge{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #FFE761;
+    color: #333;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    gap: 0.5rem;
+}
+
+.busCardStatusBadge{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #333;
+    padding: 0.5rem;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+    gap: 0.5rem;
+}
