@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import L, { LatLngExpression } from "leaflet";
 import "leaflet-routing-machine";
+import { supabase } from "../supabaseClient";
 
 interface RoutingProps {
   map: L.Map | null;
-  waypoints: L.LatLng[];
 }
 
 interface RouteSummary {
@@ -18,8 +18,32 @@ const markericon = L.icon({
   iconSize: [30, 30],
 });
 
-const RoutingPanel: React.FC<RoutingProps> = ({ map, waypoints }) => {
+const RoutingPanel: React.FC<RoutingProps> = ({ map }) => {
   const [summary, setSummary] = useState<RouteSummary | null>(null);
+  const [routes, setRoutes] = useState<
+    {
+      route_id: string;
+      route_name: string;
+      AtoBstops: { latitude: number; longitude: number }[];
+    }[]
+  >([]);
+  const [selectedRoute, setSelectedRoute] = useState<string | null>(null);
+  const [waypoints, setWaypoints] = useState<L.LatLng[]>([]);
+
+  useEffect(() => {
+    // Fetch routes from Supabase
+    const fetchRoutes = async () => {
+      const { data, error } = await supabase.from("Routes").select("*");
+
+      if (error) {
+        console.error("Error fetching routes:", error);
+      } else {
+        setRoutes(data);
+      }
+    };
+
+    fetchRoutes();
+  }, []);
 
   useEffect(() => {
     if (!map || waypoints.length === 0) return;
@@ -40,13 +64,11 @@ const RoutingPanel: React.FC<RoutingProps> = ({ map, waypoints }) => {
       ) {
         let icon;
         if (i === 0 || i === nWps - 1) {
-          // Start and end marker
           icon = markericon;
         } else {
-          // Intermediate stop markers
           icon = L.icon({
             iconUrl: "./images/icons/stop.webp",
-            iconSize: [15, 15], // Adjust icon size if needed
+            iconSize: [15, 15],
           });
         }
         return L.marker(waypoint.latLng, {
@@ -77,34 +99,66 @@ const RoutingPanel: React.FC<RoutingProps> = ({ map, waypoints }) => {
     };
   }, [map, waypoints]);
 
-  if (!summary) {
-    return <div>No Route Found</div>;
-  }
+  const handleRouteChange = async (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    const routeId = event.target.value;
+    setSelectedRoute(routeId);
 
-  const formatDistance = (meters: number) => {
-    return (meters / 1000).toFixed(2) + " km";
-  };
-
-  const formatDuration = (seconds: number) => {
-    const minutes = Math.floor(seconds / 60);
-    return `${minutes} min`;
+    // Find the selected route in the fetched routes
+    const selected = routes.find((route) => route.route_id === routeId);
+    if (selected && selected.AtoBstops) {
+      const newWaypoints = selected.AtoBstops.map(
+        (stop: { latitude: number; longitude: number }) => {
+          return L.latLng(stop.latitude, stop.longitude);
+        }
+      );
+      setWaypoints(newWaypoints);
+    }
   };
 
   return (
     <div className="routing-panel max-w-[600px]">
-      <h2>Route Summary</h2>
-      <p>Distance: {formatDistance(summary.distance)}</p>
-      <p>Duration: {formatDuration(summary.duration)}</p>
-      <h3>Steps:</h3>
-      <ul>
-        {summary.steps.map((step, index) => (
-          <li key={index}>
-            {step.instructions} ({formatDistance(step.distance)})
-          </li>
+      <h2>Route Selector</h2>
+      <select value={selectedRoute || ""} onChange={handleRouteChange}>
+        <option value="" disabled>
+          Select a route
+        </option>
+        {routes.map((route) => (
+          <option key={route.route_id} value={route.route_id}>
+            {route.route_name}
+          </option>
         ))}
-      </ul>
+      </select>
+
+      {summary && (
+        <>
+          <h2>Route Summary</h2>
+          <p>Distance: {formatDistance(summary.distance)}</p>
+          <p>Duration: {formatDuration(summary.duration)}</p>
+          <h3>Steps:</h3>
+          <ul>
+            {summary.steps.map((step, index) => (
+              <li key={index}>
+                {step.instructions} ({formatDistance(step.distance)})
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
+
+      {!summary && selectedRoute && <div>No Route Found</div>}
     </div>
   );
+};
+
+const formatDistance = (meters: number) => {
+  return (meters / 1000).toFixed(2) + " km";
+};
+
+const formatDuration = (seconds: number) => {
+  const minutes = Math.floor(seconds / 60);
+  return `${minutes} min`;
 };
 
 export default RoutingPanel;

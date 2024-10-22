@@ -33,26 +33,11 @@ interface MapProps {
   zoom: number;
 }
 
-const waypoints = [
-  L.latLng(6.936209262083772, 79.98335480690004),
-  L.latLng(6.9040229148738606, 79.9544405937195),
-  L.latLng(6.910051365238273, 79.89450931549074),
-  L.latLng(6.909939530727916, 79.85226988792421),
-  L.latLng(6.911111129047056, 79.84905660152437),
-];
-
 const MapComponent = (Map: MapProps) => {
   const [map, setMap] = useState<L.Map | null>(null);
-  const [busData, setBusData] = useState<any[]>([]);
-  const [routingMachine, setRoutingMachine] = useState(null);
 
   const busIcon = new Icon({
     iconUrl: "./images/icons/bus.webp",
-    iconSize: [30, 30],
-  });
-
-  const markericon = L.icon({
-    iconUrl: "./images/icons/marker.webp",
     iconSize: [30, 30],
   });
 
@@ -150,7 +135,7 @@ const MapComponent = (Map: MapProps) => {
 
   return (
     <div className="flex h-full">
-      <RoutingPanel map={map} waypoints={waypoints} />
+      <RoutingPanel map={map} />
       <MapContainer
         center={[6.9, 79.94]}
         zoom={11}
