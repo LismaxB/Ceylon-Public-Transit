@@ -11,7 +11,7 @@ const NavBar = () => {
         <Image
           src="/images/logo/Ceylon-Public-Tansit-Logo.png"
           alt="Ceylon Public Transit"
-          className="w-[170px] h-[50px] max-sm:w-[150px] max-sm:h-[40px]"
+          className="w-[170px] h-[50px] max-sm:w-[150px] max-sm:h-[42px]"
           width={150}
           height={58}
           priority={true}
