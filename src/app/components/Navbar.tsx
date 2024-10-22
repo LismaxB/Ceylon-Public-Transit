@@ -6,12 +6,12 @@ import Menu from "./MenuIcon";
 
 const NavBar = () => {
   return (
-    <div className="flex w-full justify-between items-center py-6 px-12 border-b-2 border-solid border-[#DDDDDD] max-sm:px-6 max-sm:py-5">
+    <div className="flex w-full justify-between items-center py-6 px-12 border-b-[1px] border-solid border-[#DDDDDD] max-sm:px-6 max-sm:py-5">
       <Link href="/">
         <Image
           src="/images/logo/Ceylon-Public-Tansit-Logo.png"
           alt="Ceylon Public Transit"
-          className="w-[170px] h-[50px] max-sm:w-[150px] max-sm:h-[40px]"
+          className="w-[170px] h-[50px] max-sm:w-[150px] max-sm:h-[42px]"
           width={150}
           height={58}
           priority={true}
