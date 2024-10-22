@@ -3,6 +3,10 @@ import L, { LatLngExpression } from "leaflet";
 import "leaflet-routing-machine";
 import { supabase } from "../supabaseClient";
 
+//Styles
+import { Separator } from "@/components/ui/separator";
+import styles from "./styles/Map.module.css";
+
 interface RoutingProps {
   map: L.Map | null;
 }
@@ -29,6 +33,7 @@ const RoutingPanel: React.FC<RoutingProps> = ({ map }) => {
   >([]);
   const [selectedRoute, setSelectedRoute] = useState<string | null>(null);
   const [waypoints, setWaypoints] = useState<L.LatLng[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     // Fetch routes from Supabase
@@ -40,6 +45,7 @@ const RoutingPanel: React.FC<RoutingProps> = ({ map }) => {
       } else {
         setRoutes(data);
       }
+      setLoading(false);
     };
 
     fetchRoutes();
@@ -118,36 +124,49 @@ const RoutingPanel: React.FC<RoutingProps> = ({ map }) => {
   };
 
   return (
-    <div className="routing-panel max-w-[600px]">
-      <h2>Route Selector</h2>
-      <select value={selectedRoute || ""} onChange={handleRouteChange}>
-        <option value="" disabled>
-          Select a route
-        </option>
-        {routes.map((route) => (
-          <option key={route.route_id} value={route.route_id}>
-            {route.route_name}
+    <div className={styles.routingPanel}>
+      <div className={styles.routingPanelCard}>
+        <h2 className="font-bold">Select a route</h2>
+        <select value={selectedRoute || ""} onChange={handleRouteChange}>
+          <option value="" disabled>
+            Select a route
           </option>
-        ))}
-      </select>
+          {routes.map((route) => (
+            <option key={route.route_id} value={route.route_id}>
+              {route.route_name}
+            </option>
+          ))}
+        </select>
+      </div>
 
       {summary && (
-        <>
-          <h2>Route Summary</h2>
-          <p>Distance: {formatDistance(summary.distance)}</p>
-          <p>Duration: {formatDuration(summary.duration)}</p>
-          <h3>Steps:</h3>
-          <ul>
-            {summary.steps.map((step, index) => (
-              <li key={index}>
-                {step.instructions} ({formatDistance(step.distance)})
-              </li>
-            ))}
-          </ul>
-        </>
+        <div className={styles.routeSummaryCard}>
+          <h2 className="font-bold">Route Summary</h2>
+          <p className={styles.routeBadge}>
+            Distance: {formatDistance(summary.distance)}
+          </p>
+          <p className={styles.routeBadge}>
+            Duration: {formatDuration(summary.duration)}
+          </p>
+          <div className="h-80 overflow-y-scroll">
+            <h3>Steps:</h3>
+            <ul>
+              {summary.steps.map((step, index) => (
+                <li key={index}>
+                  {step.instructions} ({formatDistance(step.distance)})
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
       )}
-
-      {!summary && selectedRoute && <div>No Route Found</div>}
+      {!summary && !loading && selectedRoute && <div>No Route Found</div>}
+      <div className={styles.routingPanelFooter}>
+        <Separator />
+        <a href="https://github.com/LismaxB/Ceylon-Public-Transit/releases/tag/v0.5.1-beta">
+          v0.5.1-beta
+        </a>
+      </div>
     </div>
   );
 };
@@ -157,7 +176,7 @@ const formatDistance = (meters: number) => {
 };
 
 const formatDuration = (seconds: number) => {
-  const minutes = Math.floor(seconds / 60);
+  const minutes = Math.floor((seconds / 60) * 2);
   return `${minutes} min`;
 };
 

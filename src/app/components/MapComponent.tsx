@@ -134,13 +134,13 @@ const MapComponent = (Map: MapProps) => {
   }, [map]);
 
   return (
-    <div className="flex h-full">
+    <div className="flex h-[calc(100vh-100px)] w-full">
       <RoutingPanel map={map} />
       <MapContainer
         center={[6.9, 79.94]}
         zoom={11}
         scrollWheelZoom={true}
-        style={{ height: "90vh", width: "100%" }}
+        style={{ height: "100%", width: "100%" }}
         ref={setMap}
       >
         <TileLayer

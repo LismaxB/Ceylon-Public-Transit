@@ -2,9 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
+/* body {
   font-family: Arial, Helvetica, sans-serif;
-}
+} */
 
 @layer utilities {
   .text-balance {
@@ -75,4 +75,8 @@ body {
   body {
     @apply bg-background text-foreground;
   }
+}
+
+.leaflet-right .leaflet-routing-container.leaflet-routing-container-hide{
+  display: none;
 }

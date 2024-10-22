@@ -6,7 +6,7 @@ import Menu from "./MenuIcon";
 
 const NavBar = () => {
   return (
-    <div className="flex w-full justify-between items-center py-6 px-12 border-b-2 border-solid border-[#DDDDDD] max-sm:px-6 max-sm:py-5">
+    <div className="flex w-full justify-between items-center py-6 px-12 border-b-[1px] border-solid border-[#DDDDDD] max-sm:px-6 max-sm:py-5">
       <Link href="/">
         <Image
           src="/images/logo/Ceylon-Public-Tansit-Logo.png"
