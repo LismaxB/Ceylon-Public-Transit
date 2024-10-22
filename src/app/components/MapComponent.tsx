@@ -134,7 +134,7 @@ const MapComponent = (Map: MapProps) => {
   }, [map]);
 
   return (
-    <div className="flex h-[calc(100vh-100px)] w-full">
+    <div className="flex h-[calc(100vh-100px)] w-full max-sm:h-[calc(100vh-83px)]">
       <RoutingPanel map={map} />
       <MapContainer
         center={[6.9, 79.94]}
