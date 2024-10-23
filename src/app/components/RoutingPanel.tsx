@@ -7,7 +7,7 @@ import { supabase } from "../supabaseClient";
 import { Separator } from "@/components/ui/separator";
 import styles from "./styles/Map.module.css";
 
-import { Users } from "lucide-react";
+import { Users, Clock, Compass } from "lucide-react";
 
 interface RoutingProps {
   map: L.Map | null;
@@ -185,19 +185,27 @@ const RoutingPanel: React.FC<RoutingProps> = ({ map, selectedBus }) => {
 
       {summary && (
         <div className={styles.routeSummaryCard}>
-          <h2 className="font-bold">Route Summary</h2>
-          <p className={styles.routeBadge}>
-            Distance: {formatDistance(summary.distance)}
-          </p>
-          <p className={styles.routeBadge}>
-            Duration: {formatDuration(summary.duration)}
-          </p>
-          <div className="h-72 overflow-y-scroll">
-            <h3>Steps:</h3>
+          <div className={styles.busCardInnerTopw}>
+            <h2 className="font-bold">Route Summary</h2>
+            <p className={styles.routeBadgeE}>
+              <Clock size={20} />
+              {formatDuration(summary.duration)}
+            </p>
+          </div>
+          <div className={styles.busCardInnerTopt}>
+            <p>
+              <span>Distance: </span>
+              <span className="font-semibold">
+                {formatDistance(summary.distance)}
+              </span>
+            </p>
+          </div>
+          <div className={`h-72 overflow-y-scroll ${styles.summaryScroll}`}>
             <ul>
               {summary.steps.map((step, index) => (
                 <li key={index}>
-                  {step.instructions} ({formatDistance(step.distance)})
+                  <span className={styles.direction}>{step.instructions}</span>
+                  {/* ({formatDistance(step.distance)}) */}
                 </li>
               ))}
             </ul>
@@ -256,8 +264,13 @@ const formatDistance = (meters: number) => {
 };
 
 const formatDuration = (seconds: number) => {
-  const minutes = Math.floor((seconds / 60) * 2);
-  return `${minutes} min`;
+  const hours = Math.floor((seconds / 3600) * 2);
+  const minutes = Math.floor(((seconds % 3600) * 2) / 60);
+
+  const formattedHours = hours > 0 ? `${hours} hrs ` : "";
+  const formattedMinutes = minutes > 0 ? `${minutes} min` : "";
+
+  return `${formattedHours}${formattedMinutes}`;
 };
 
 export default RoutingPanel;
