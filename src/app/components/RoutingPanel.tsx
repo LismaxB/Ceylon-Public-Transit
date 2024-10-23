@@ -244,8 +244,10 @@ const RoutingPanel: React.FC<RoutingProps> = ({ map, selectedBus }) => {
                 )}
               </div>
             </div>
-            <p className={styles.routeBadge}>Private: {currentBus.private}</p>
-            <p className={styles.routeBadge}>Status: {currentBus.active}</p>
+            <p className={styles.routeBadge}>
+              {currentBus.private ? <span>Private</span> : <span>CTB</span>}
+            </p>
+            <p className={styles.routeBadge}>Bus Type: {currentBus.bus_type}</p>
           </div>
         </div>
       )}
