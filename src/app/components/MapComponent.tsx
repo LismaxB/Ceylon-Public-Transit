@@ -33,8 +33,23 @@ interface MapProps {
   zoom: number;
 }
 
+interface Bus {
+  id: string;
+  bus_number: string;
+  capacity: number;
+  bus_type: string;
+  private: boolean;
+  active: boolean;
+  bus_id: string;
+  driver_id: string;
+  latitude: number;
+  longitude: number;
+  route_id: string;
+}
+
 const MapComponent = (Map: MapProps) => {
   const [map, setMap] = useState<L.Map | null>(null);
+  const [selectedBus, setSelectedBus] = useState<Bus | null>(null);
 
   const busIcon = new Icon({
     iconUrl: "./images/icons/bus.webp",
@@ -42,6 +57,10 @@ const MapComponent = (Map: MapProps) => {
   });
 
   const busMap: { [key: string]: { marker: L.Marker; data: any } } = {};
+
+  const handleBusClick = (BUS: any) => {
+    setSelectedBus(BUS);
+  };
 
   useEffect(() => {
     async function fetchBusData() {
@@ -106,6 +125,10 @@ const MapComponent = (Map: MapProps) => {
           const marker = L.marker(busLatLng, { icon: busIcon })
             .addTo(map)
             .bindPopup(`Driver: ${driver_id}`);
+
+          marker.on("click", function (e) {
+            handleBusClick(bus);
+          });
           // Store the marker and data in busMap
           busMap[driver_id] = { marker, data: bus };
         }
@@ -134,8 +157,8 @@ const MapComponent = (Map: MapProps) => {
   }, [map]);
 
   return (
-    <div className="flex h-[calc(100vh-100px)] w-full">
-      <RoutingPanel map={map} />
+    <div className="flex h-[calc(100vh-100px)] w-full max-sm:h-[calc(100vh-83px)]">
+      <RoutingPanel map={map} selectedBus={selectedBus} />
       <MapContainer
         center={[6.9, 79.94]}
         zoom={11}

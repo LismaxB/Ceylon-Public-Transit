@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import L, { LatLngExpression } from "leaflet";
 import "leaflet-routing-machine";
 import { supabase } from "../supabaseClient";
@@ -7,8 +7,11 @@ import { supabase } from "../supabaseClient";
 import { Separator } from "@/components/ui/separator";
 import styles from "./styles/Map.module.css";
 
+import { Users, Clock, Compass } from "lucide-react";
+
 interface RoutingProps {
   map: L.Map | null;
+  selectedBus: Bus | null;
 }
 
 interface RouteSummary {
@@ -22,7 +25,21 @@ const markericon = L.icon({
   iconSize: [30, 30],
 });
 
-const RoutingPanel: React.FC<RoutingProps> = ({ map }) => {
+interface Bus {
+  id: string;
+  bus_number: string;
+  capacity: number;
+  bus_type: string;
+  private: boolean;
+  active: boolean;
+  bus_id: string;
+  driver_id: string;
+  latitude: number;
+  longitude: number;
+  route_id: string;
+}
+
+const RoutingPanel: React.FC<RoutingProps> = ({ map, selectedBus }) => {
   const [summary, setSummary] = useState<RouteSummary | null>(null);
   const [routes, setRoutes] = useState<
     {
@@ -34,6 +51,7 @@ const RoutingPanel: React.FC<RoutingProps> = ({ map }) => {
   const [selectedRoute, setSelectedRoute] = useState<string | null>(null);
   const [waypoints, setWaypoints] = useState<L.LatLng[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [currentBus, setCurrentBus] = useState<Bus | null>(null);
 
   useEffect(() => {
     // Fetch routes from Supabase
@@ -123,6 +141,32 @@ const RoutingPanel: React.FC<RoutingProps> = ({ map }) => {
     }
   };
 
+  useEffect(() => {
+    if (!selectedBus) return;
+    async function fetchBusData() {
+      if (!selectedBus) return;
+      const { data, error } = await supabase
+        .from("BusData")
+        .select("*")
+        .eq("id", selectedBus.bus_id)
+        .maybeSingle();
+
+      if (error) console.log("Error fetching bus data", error);
+      setCurrentBus(data);
+    }
+    fetchBusData();
+
+    console.log("Selected Bus", selectedBus);
+
+    return () => {
+      setCurrentBus(null);
+    };
+  }, [selectedBus]);
+
+  useEffect(() => {
+    console.log("Current Bus", currentBus);
+  }, [currentBus]);
+
   return (
     <div className={styles.routingPanel}>
       <div className={styles.routingPanelCard}>
@@ -141,19 +185,27 @@ const RoutingPanel: React.FC<RoutingProps> = ({ map }) => {
 
       {summary && (
         <div className={styles.routeSummaryCard}>
-          <h2 className="font-bold">Route Summary</h2>
-          <p className={styles.routeBadge}>
-            Distance: {formatDistance(summary.distance)}
-          </p>
-          <p className={styles.routeBadge}>
-            Duration: {formatDuration(summary.duration)}
-          </p>
-          <div className="h-80 overflow-y-scroll">
-            <h3>Steps:</h3>
+          <div className={styles.busCardInnerTopw}>
+            <h2 className="font-bold">Route Summary</h2>
+            <p className={styles.routeBadgeE}>
+              <Clock size={20} />
+              {formatDuration(summary.duration)}
+            </p>
+          </div>
+          <div className={styles.busCardInnerTopt}>
+            <p>
+              <span>Distance: </span>
+              <span className="font-semibold">
+                {formatDistance(summary.distance)}
+              </span>
+            </p>
+          </div>
+          <div className={`h-72 overflow-y-scroll ${styles.summaryScroll}`}>
             <ul>
               {summary.steps.map((step, index) => (
                 <li key={index}>
-                  {step.instructions} ({formatDistance(step.distance)})
+                  <span className={styles.direction}>{step.instructions}</span>
+                  {/* ({formatDistance(step.distance)}) */}
                 </li>
               ))}
             </ul>
@@ -161,6 +213,44 @@ const RoutingPanel: React.FC<RoutingProps> = ({ map }) => {
         </div>
       )}
       {!summary && !loading && selectedRoute && <div>No Route Found</div>}
+      {currentBus && (
+        <div>
+          <Separator />
+          <div className={styles.busCard}>
+            <h2 className="font-bold">Bus Details</h2>
+            <div className={styles.busCardInnerTop}>
+              <p className={styles.busCardNOBadge}>
+                Bus No. - {currentBus.bus_number}
+              </p>
+              <div className={styles.busCardCBadge}>
+                <Users size={20} />
+                <span className="text-lg">{currentBus.capacity}</span>
+              </div>
+              <div className={styles.busCardStatusBadge}>
+                {currentBus.active ? (
+                  <>
+                    <svg width="15" height="15">
+                      <circle cx="50%" cy="50%" r="7" fill="#238823" />
+                    </svg>
+                    <span className="max-xl:hidden">Active</span>
+                  </>
+                ) : (
+                  <>
+                    <svg width="15" height="15">
+                      <circle cx="50%" cy="50%" r="7" fill="#D2222D" />
+                    </svg>
+                    <span className="max-xl:hidden">Not Active</span>
+                  </>
+                )}
+              </div>
+            </div>
+            <p className={styles.routeBadge}>
+              {currentBus.private ? <span>Private</span> : <span>CTB</span>}
+            </p>
+            <p className={styles.routeBadge}>Bus Type: {currentBus.bus_type}</p>
+          </div>
+        </div>
+      )}
       <div className={styles.routingPanelFooter}>
         <Separator />
         <a href="https://github.com/LismaxB/Ceylon-Public-Transit/releases/tag/v0.5.1-beta">
@@ -176,8 +266,13 @@ const formatDistance = (meters: number) => {
 };
 
 const formatDuration = (seconds: number) => {
-  const minutes = Math.floor((seconds / 60) * 2);
-  return `${minutes} min`;
+  const hours = Math.floor((seconds / 3600) * 2);
+  const minutes = Math.floor(((seconds % 3600) * 2) / 60);
+
+  const formattedHours = hours > 0 ? `${hours} hrs ` : "";
+  const formattedMinutes = minutes > 0 ? `${minutes} min` : "";
+
+  return `${formattedHours}${formattedMinutes}`;
 };
 
 export default RoutingPanel;
