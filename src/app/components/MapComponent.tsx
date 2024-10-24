@@ -57,6 +57,11 @@ const privatebusIcon = new Icon({
   iconSize: [35, 35],
 });
 
+const luxuryBusIcon = new Icon({
+  iconUrl: "./images/icons/luxury_bus.webp",
+  iconSize: [35, 35],
+});
+
 const MapComponent = (Map: MapProps) => {
   const [map, setMap] = useState<L.Map | null>(null);
   const [selectedBus, setSelectedBus] = useState<Bus | null>(null);
@@ -128,7 +133,9 @@ const MapComponent = (Map: MapProps) => {
           // Create a new marker for the new driver location
           if (!map) return;
           const busMarkerIcon = bus.BusData
-            ? bus.BusData.private
+            ? bus.BusData.bus_type === "Luxury"
+              ? luxuryBusIcon
+              : bus.BusData.private
               ? privatebusIcon
               : busIcon
             : busIcon;
