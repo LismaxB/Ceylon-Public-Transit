@@ -156,16 +156,10 @@ const RoutingPanel: React.FC<RoutingProps> = ({ map, selectedBus }) => {
     }
     fetchBusData();
 
-    console.log("Selected Bus", selectedBus);
-
     return () => {
       setCurrentBus(null);
     };
   }, [selectedBus]);
-
-  useEffect(() => {
-    console.log("Current Bus", currentBus);
-  }, [currentBus]);
 
   return (
     <div className={styles.routingPanel}>
@@ -217,7 +211,7 @@ const RoutingPanel: React.FC<RoutingProps> = ({ map, selectedBus }) => {
         <div>
           <Separator />
           <div className={styles.busCard}>
-            <h2 className="font-bold">Bus Details</h2>
+            <h2 className="font-bold">Selected Bus Details</h2>
             <div className={styles.busCardInnerTop}>
               <p className={styles.busCardNOBadge}>
                 Bus No. - {currentBus.bus_number}
