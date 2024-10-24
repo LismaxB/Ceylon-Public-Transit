@@ -53,7 +53,7 @@ const MapComponent = (Map: MapProps) => {
 
   const busIcon = new Icon({
     iconUrl: "./images/icons/bus.webp",
-    iconSize: [30, 30],
+    iconSize: [35, 35],
   });
 
   const busMap: { [key: string]: { marker: L.Marker; data: any } } = {};

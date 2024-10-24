@@ -217,7 +217,7 @@ const RoutingPanel: React.FC<RoutingProps> = ({ map, selectedBus }) => {
         <div>
           <Separator />
           <div className={styles.busCard}>
-            <h2 className="font-bold">Bus Details</h2>
+            <h2 className="font-bold">Selected Bus Details</h2>
             <div className={styles.busCardInnerTop}>
               <p className={styles.busCardNOBadge}>
                 Bus No. - {currentBus.bus_number}
