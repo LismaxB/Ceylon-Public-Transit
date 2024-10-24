@@ -47,14 +47,19 @@ interface Bus {
   route_id: string;
 }
 
+const busIcon = new Icon({
+  iconUrl: "./images/icons/bus.webp",
+  iconSize: [35, 35],
+});
+
+const privatebusIcon = new Icon({
+  iconUrl: "./images/icons/private_bus.webp",
+  iconSize: [35, 35],
+});
+
 const MapComponent = (Map: MapProps) => {
   const [map, setMap] = useState<L.Map | null>(null);
   const [selectedBus, setSelectedBus] = useState<Bus | null>(null);
-
-  const busIcon = new Icon({
-    iconUrl: "./images/icons/bus.webp",
-    iconSize: [35, 35],
-  });
 
   const busMap: { [key: string]: { marker: L.Marker; data: any } } = {};
 
@@ -66,7 +71,7 @@ const MapComponent = (Map: MapProps) => {
     async function fetchBusData() {
       const { data, error } = await supabase
         .from("DriverLocations")
-        .select("*")
+        .select("*, BusData(*)")
         .order("timestamp", { ascending: false }); // This ensures that we get the most recent locations first
 
       if (error) {
@@ -122,7 +127,12 @@ const MapComponent = (Map: MapProps) => {
         } else {
           // Create a new marker for the new driver location
           if (!map) return;
-          const marker = L.marker(busLatLng, { icon: busIcon })
+          const busMarkerIcon = bus.BusData
+            ? bus.BusData.private
+              ? privatebusIcon
+              : busIcon
+            : busIcon;
+          const marker = L.marker(busLatLng, { icon: busMarkerIcon })
             .addTo(map)
             .bindPopup(`Driver: ${driver_id}`);
 
