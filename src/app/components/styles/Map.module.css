@@ -10,6 +10,10 @@
     width: 600px;
     max-width: 700px;
     padding-top: 1rem;
+    gap: 1rem;
+    scrollbar-width: thin;
+    scrollbar-color: #888 #f5f5f5;
+    overflow-y: auto;
 }
 
 @media screen and (max-width: 768px){
@@ -76,7 +80,7 @@
 
 .routingPanelFooter{
     justify-self: flex-end;
-    padding: 1rem 1rem;
+    padding: 0rem 1rem 1rem 1rem;
     text-align: left;
     color:#999;
 }
@@ -155,6 +159,12 @@
     border-radius: 0.5rem;
     scrollbar-width: thin;
     scrollbar-color: #888 #f5f5f5;
+  }
+
+  @media screen and (max-height: 768px){
+    .summaryScroll{
+        height: 150px;
+    }
   }
   
   .summaryScroll ul {
