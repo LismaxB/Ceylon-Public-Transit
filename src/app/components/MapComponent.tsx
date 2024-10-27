@@ -21,6 +21,7 @@ declare module "leaflet" {
   }
 }
 
+import styles from "./styles/Map.module.css";
 import "leaflet/dist/leaflet.css";
 import "leaflet-defaulticon-compatibility";
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css";
@@ -76,7 +77,7 @@ const MapComponent = (Map: MapProps) => {
     async function fetchBusData() {
       const { data, error } = await supabase
         .from("DriverLocations")
-        .select("*, BusData(*)")
+        .select("*, BusData(*), Routes(*)")
         .order("timestamp", { ascending: false }); // This ensures that we get the most recent locations first
 
       if (error) {
@@ -139,9 +140,13 @@ const MapComponent = (Map: MapProps) => {
               ? privatebusIcon
               : busIcon
             : busIcon;
-          const marker = L.marker(busLatLng, { icon: busMarkerIcon })
-            .addTo(map)
-            .bindPopup(`Driver: ${driver_id}`);
+          const marker = L.marker(busLatLng, { icon: busMarkerIcon }).addTo(map)
+            .bindPopup(`
+              <div class="${styles.popupW}">
+                <h3>${bus.BusData?.bus_number || "N/A"}</h3>
+                <span>${bus.Routes?.route_name || "N/A"}</span>
+              </div>
+              `);
 
           marker.on("click", function (e) {
             handleBusClick(bus);
