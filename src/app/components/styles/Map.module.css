@@ -188,3 +188,13 @@
     flex: 1;
     padding-bottom: 0.5rem;
   }
+
+  .popupW{
+    display: flex;
+    flex-direction: column;
+    font-family: poppins;
+  }
+
+  .popupW h3{
+    text-align: center;
+  }
