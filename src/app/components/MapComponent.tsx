@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 
 import { MapContainer, TileLayer, Popup } from "react-leaflet";
-import { LatLngExpression, LatLngTuple } from "leaflet";
 import L, { Icon, Marker } from "leaflet";
 
 import "leaflet.marker.slideto";
@@ -28,25 +27,7 @@ import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility
 import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
 
 import { supabase } from "../supabaseClient";
-
-interface MapProps {
-  posix: LatLngExpression | LatLngTuple;
-  zoom: number;
-}
-
-interface Bus {
-  id: string;
-  bus_number: string;
-  capacity: number;
-  bus_type: string;
-  private: boolean;
-  active: boolean;
-  bus_id: string;
-  driver_id: string;
-  latitude: number;
-  longitude: number;
-  route_id: string;
-}
+import { MapProps, Bus } from "./MapProps";
 
 const busIcon = new Icon({
   iconUrl: "./images/icons/bus.webp",

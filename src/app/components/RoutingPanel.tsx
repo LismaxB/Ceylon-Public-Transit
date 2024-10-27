@@ -8,36 +8,12 @@ import { Separator } from "@/components/ui/separator";
 import styles from "./styles/Map.module.css";
 
 import { Users, Clock, Compass } from "lucide-react";
-
-interface RoutingProps {
-  map: L.Map | null;
-  selectedBus: Bus | null;
-}
-
-interface RouteSummary {
-  distance: number; // in meters
-  duration: number; // in seconds
-  steps: Array<{ instructions: string; distance: number }>;
-}
+import { Bus, RoutingProps, RouteSummary } from "./MapProps";
 
 const markericon = L.icon({
   iconUrl: "./images/icons/marker.webp",
   iconSize: [30, 30],
 });
-
-interface Bus {
-  id: string;
-  bus_number: string;
-  capacity: number;
-  bus_type: string;
-  private: boolean;
-  active: boolean;
-  bus_id: string;
-  driver_id: string;
-  latitude: number;
-  longitude: number;
-  route_id: string;
-}
 
 const RoutingPanel: React.FC<RoutingProps> = ({ map, selectedBus }) => {
   const [summary, setSummary] = useState<RouteSummary | null>(null);
