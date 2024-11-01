@@ -5,7 +5,17 @@ module.exports = {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   presets: [require("nativewind/preset")],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        Poppins: ["Poppins", "sans-serif"],
+        PoppinsBold: ["PoppinsBold", "sans-serif"],
+        PoppinsBlack: ["PoppinsBlack", "sans-serif"],
+        PoppinsLight: ["PoppinsLight", "sans-serif"],
+        PoppinsThin: ["PoppinsThin", "sans-serif"],
+        PoppinsSemiBold: ["PoppinsSemiBold", "sans-serif"],
+        PoppinsMedium: ["PoppinsMedium", "sans-serif"],
+      },
+    },
   },
   plugins: [],
 }
