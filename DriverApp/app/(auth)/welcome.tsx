@@ -11,7 +11,7 @@ export default function Onboarding() {
   const isLastSlide = activeIndex === onboarding.length - 1;
 
   return (
-    <SafeAreaView className="flex h-full items-center justify-between bg-white">
+    <SafeAreaView className="flex h-full items-center justify-between bg-white py-5">
       <TouchableOpacity
         className="flex w-full justify-end items-end p-6"
         onPress={() => {
