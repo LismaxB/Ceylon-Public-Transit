@@ -1,7 +1,8 @@
 {
   "expo": {
-    "name": "ClientApp",
-    "slug": "ClientApp",
+    "name": "Ceylon Public Transit",
+    "scheme": "ceylonpublictransit",
+    "slug": "ceylon-public-transit",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -22,6 +23,7 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": ["expo-router"]
   }
 }
