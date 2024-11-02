@@ -45,7 +45,7 @@ const CTA = ({
 }: ButtonProps) => (
   <TouchableOpacity
     onPress={onPress}
-    className={`w-full rounded-2xl px-4 py-2 min-w-40 flex justify-center items-center shadow-md shadow-neutral-400/70 ${getBgVariantStyle(
+    className={`w-full rounded-2xl px-4 py-2 min-w-40 min-h-11 flex justify-center items-center shadow-md shadow-neutral-400/70 ${getBgVariantStyle(
       bgVariant
     )} ${className}`}
     {...props}
