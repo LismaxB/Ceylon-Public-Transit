@@ -1,8 +1,10 @@
 import CTA from "@/components/cta";
 import Input from "@/components/Input";
 import React from "react";
-import { ScrollView, Text, View, TouchableOpacity } from "react-native";
+import { ScrollView, Text, View, TouchableOpacity, Alert } from "react-native";
 import { Link, router } from "expo-router";
+
+import { supabase } from "@/lib/supabase";
 
 export default function SignIn() {
   const [form, setForm] = React.useState({
@@ -10,7 +12,15 @@ export default function SignIn() {
     password: "",
   });
 
-  const onSignIn = async () => {};
+  const onSignIn = async () => {
+    const { error } = await supabase.auth.signInWithPassword({
+      email: form.email,
+      password: form.password,
+    });
+
+    if (error) Alert.alert(error.message);
+    else router.replace("/home");
+  };
 
   return (
     <ScrollView className="flex-1 bg-white p-5">
