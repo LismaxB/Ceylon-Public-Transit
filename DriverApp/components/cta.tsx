@@ -14,14 +14,14 @@ const getBgVariantStyle = (varient: ButtonProps["bgVariant"]) => {
     case "outline":
       return "bg-transparent border-neutral-300 border-[0.5px]";
     default:
-      return "bg-[#0286FF]";
+      return "bg-black";
   }
 };
 
 const getTextVariantStyle = (varient: ButtonProps["textVariant"]) => {
   switch (varient) {
     case "primary":
-      return "text-black";
+      return "text-white";
     case "secondary":
       return "text-gray-100";
     case "danger":
@@ -45,7 +45,7 @@ const CTA = ({
 }: ButtonProps) => (
   <TouchableOpacity
     onPress={onPress}
-    className={`w-full rounded-2xl p-3 flex justify-center items-center shadow-md shadow-neutral-400/70 ${getBgVariantStyle(
+    className={`w-full rounded-2xl px-4 py-2 min-w-40 flex justify-center items-center shadow-md shadow-neutral-400/70 ${getBgVariantStyle(
       bgVariant
     )} ${className}`}
     {...props}

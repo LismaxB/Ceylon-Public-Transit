@@ -40,7 +40,7 @@ export default function Onboarding() {
       </Swiper>
       <CTA
         title={isLastSlide ? "Get Started" : "Next"}
-        className="w-4/6 mt-10"
+        className="w-5/12 mt-10 mb-10"
         onPress={() => {
           if (isLastSlide) {
             router.replace("/(auth)/sign-up");
