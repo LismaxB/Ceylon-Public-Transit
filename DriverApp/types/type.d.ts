@@ -20,3 +20,21 @@ declare interface ButtonProps extends TouchableOpacityProps {
     iconStyle?: string;
     className?: string;
   }
+
+  declare interface SelectorProps{
+    placeholder: string;
+    items: Array;
+    onValueChange: (value: T | null) => void;
+    selectedValue: T | null;
+    className?: string;
+  }
+
+  declare interface StoreProps {
+    bus_id:string;
+    setBusId:(string)=>void;
+  }
+
+  declare interface TripProps{
+    latitude:number;
+    longitude:number;
+  }
