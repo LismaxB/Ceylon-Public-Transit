@@ -28,3 +28,13 @@ declare interface ButtonProps extends TouchableOpacityProps {
     selectedValue: T | null;
     className?: string;
   }
+
+  declare interface StoreProps {
+    bus_id:string;
+    setBusId:(string)=>void;
+  }
+
+  declare interface TripProps{
+    latitude:number;
+    longitude:number;
+  }

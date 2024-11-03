@@ -5,6 +5,8 @@ import CTA from "@/components/cta";
 import { supabase } from "@/lib/supabase";
 import Input from "@/components/Input";
 import Selector from "@/components/Selector";
+import { useStore } from "@/store";
+import { router } from "expo-router";
 
 const Profile = () => {
   const [busData, setBusData] = React.useState({
@@ -14,6 +16,8 @@ const Profile = () => {
     capacity: "",
     private: null as boolean | null,
   });
+
+  const { setBusId } = useStore();
 
   const handleBusForm = async () => {
     if (busData.bus_no === "") return;
@@ -36,7 +40,8 @@ const Profile = () => {
       alert("Error inserting data. Please try again.");
     }
     setBusData({ ...busData, bus_id: data ? data[0].id : "" });
-    console.log(data ? data[0].id : "");
+    setBusId(data ? data[0].id : "");
+    router.replace("./home");
   };
 
   return (
