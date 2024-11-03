@@ -1,8 +1,9 @@
-import { SafeAreaView, Text } from "react-native";
+import { SafeAreaView, View, Text } from "react-native";
 import React, { useState, useEffect } from "react";
 
 import { Session } from "@supabase/supabase-js";
 import { supabase } from "@/lib/supabase";
+import CTA from "@/components/cta";
 
 const Home = () => {
   const [session, setSession] = useState<Session | null>(null);
@@ -17,9 +18,14 @@ const Home = () => {
     });
   }, []);
   return (
-    <SafeAreaView className="mt-10">
-      <Text>Home</Text>
-      {session && <Text>{session.user?.id}</Text>}
+    <SafeAreaView className="pt-24 p-5">
+      <Text className="text-2xl font-PoppinsBold">
+        Welcome, {session?.user.user_metadata.name} ! 👋
+      </Text>
+      <View className="mt-10 flex justify-center items-center">
+        <CTA title="Start Trip" className="mb-8 !w-64" />
+        <CTA title="End Trip" className="!w-64" bgVariant="danger" />
+      </View>
     </SafeAreaView>
   );
 };
