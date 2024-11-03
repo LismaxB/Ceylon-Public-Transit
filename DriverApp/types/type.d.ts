@@ -20,3 +20,11 @@ declare interface ButtonProps extends TouchableOpacityProps {
     iconStyle?: string;
     className?: string;
   }
+
+  declare interface SelectorProps{
+    placeholder: string;
+    items: Array;
+    onValueChange: (value: T | null) => void;
+    selectedValue: T | null;
+    className?: string;
+  }
