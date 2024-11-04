@@ -1,6 +1,6 @@
 {
   "name": "ceylon-public-transit",
-  "version": "0.5.1",
+  "version": "v0.8.3-beta",
   "private": true,
   "scripts": {
     "dev": "next dev",

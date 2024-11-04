@@ -1,5 +1,5 @@
 {
   "$schema": "node_modules/lerna/schemas/lerna-schema.json",
-  "version": "0.5.1",
+  "version": "v0.8.3-beta",
   "packages": [".", "DriverApp", "ClientApp"]
 }
