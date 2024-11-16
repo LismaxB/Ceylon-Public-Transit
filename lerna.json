@@ -1,5 +1,7 @@
 {
   "$schema": "node_modules/lerna/schemas/lerna-schema.json",
   "version": "v0.8.3-beta",
-  "packages": [".", "DriverApp", "ClientApp"]
+  "packages": ["DriverApp", "ClientApp"],
+  "npmClient": "npm",
+  "useWorkspaces": true
 }
