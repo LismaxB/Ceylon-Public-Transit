@@ -62,6 +62,7 @@ export default function SignUp() {
           placeholder="Enter you password"
           value={form.password}
           onChangeText={(value) => setForm({ ...form, password: value })}
+          secureTextEntry={true}
         />
         <View className="flex justify-center items-center">
           <CTA
