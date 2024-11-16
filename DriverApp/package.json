@@ -1,7 +1,7 @@
 {
-  "name": "driverappv2",
+  "name": "ceylon-public-transit-driver",
   "main": "expo-router/entry",
-  "version": "1.0.0",
+  "version": "v0.8.3-beta",
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",
