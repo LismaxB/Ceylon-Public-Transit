@@ -40,7 +40,7 @@ const Home = () => {
       latitude,
       longitude,
       timestamp: new Date().toISOString(),
-      driver_id: 5, // Genarate this!
+      driver_id: session?.user.id,
       bus_id,
     });
 
