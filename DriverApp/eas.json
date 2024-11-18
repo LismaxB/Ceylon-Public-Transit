@@ -8,6 +8,18 @@
       "developmentClient": true,
       "distribution": "internal"
     },
+    "androidAPK": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "android": {
+        "buildType": "apk",
+        "gradleCommand": ":app:assembleRelease"
+      },
+      "env": {
+        "EXPO_PUBLIC_SUPABASE_URL": "",
+        "EXPO_PUBLIC_SUPABASE_ANON_KEY": ""
+      }
+    },
     "preview": {
       "distribution": "internal"
     },
