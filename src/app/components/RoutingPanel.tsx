@@ -24,6 +24,7 @@ const RoutingPanel: React.FC<RoutingProps> = ({ map, selectedBus }) => {
       AtoBstops: { latitude: number; longitude: number }[];
     }[]
   >([]);
+  const [version, setVersion] = useState<string | null>(null);
   const [selectedRoute, setSelectedRoute] = useState<string | null>(null);
   const [waypoints, setWaypoints] = useState<L.LatLng[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -137,6 +138,15 @@ const RoutingPanel: React.FC<RoutingProps> = ({ map, selectedBus }) => {
     };
   }, [selectedBus]);
 
+  async function getVersion() {
+    const data = await fetch(
+      "https://api.github.com/repos/LismaxB/Ceylon-Public-Transit/releases/latest"
+    );
+    const release = await data.json();
+    return release.tag_name;
+  }
+  getVersion().then((version) => setVersion(version));
+
   return (
     <div className={styles.routingPanel}>
       <div className={styles.routingPanelCard}>
@@ -223,9 +233,13 @@ const RoutingPanel: React.FC<RoutingProps> = ({ map, selectedBus }) => {
       )}
       <div className={styles.routingPanelFooter}>
         <Separator />
-        <a href="https://github.com/LismaxB/Ceylon-Public-Transit/releases/tag/v0.5.1-beta">
-          v0.5.1-beta
-        </a>
+        {version && (
+          <a
+            href={`https://github.com/LismaxB/Ceylon-Public-Transit/releases/tag/${version}`}
+          >
+            {version}
+          </a>
+        )}
       </div>
     </div>
   );
