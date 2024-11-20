@@ -1,5 +1,9 @@
 import home from "@/assets/icons/home.png";
 import settings from "@/assets/icons/settings.png";
+import bus from "@/assets/icons/bus.png";
+import privateBus from "@/assets/icons/private_bus.png";
+import luxuryBus from "@/assets/icons/luxury_bus.png";
+import users from "@/assets/icons/users.png";
 
 export const onboarding = [
     {
@@ -18,5 +22,9 @@ export const onboarding = [
 
 export const icons = {
     home,
-    settings
+    settings,
+    users,
+    bus,
+    privateBus,
+    luxuryBus,
   };

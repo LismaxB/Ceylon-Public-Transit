@@ -29,9 +29,20 @@ declare interface ButtonProps extends TouchableOpacityProps {
     className?: string;
   }
 
+  declare interface BusDataProps{
+    bus_number:string;
+    bus_type:string;
+    capacity:number;
+    private:boolean;
+    active:boolean;
+    created_at:string;
+  }
+
   declare interface StoreProps {
     bus_id:string;
     setBusId:(string)=>void;
+    busDetails:BusDataProps;
+    setBusDetails:(BusDataProps)=>void;
   }
 
   declare interface TripProps{
