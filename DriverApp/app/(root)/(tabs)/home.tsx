@@ -1,4 +1,4 @@
-import { SafeAreaView, View, Text, Alert } from "react-native";
+import { SafeAreaView, View, Text, Alert, Image } from "react-native";
 import React, { useState, useEffect } from "react";
 
 import { Session } from "@supabase/supabase-js";
@@ -10,10 +10,14 @@ import { useStore } from "@/store";
 import { router } from "expo-router";
 // import { TripProps } from "@/types/type";
 
+import { icons } from "@/constants";
+
 const Home = () => {
   const [session, setSession] = useState<Session | null>(null);
   let rideStarted = false;
   const { bus_id } = useStore();
+  const { busDetails } = useStore();
+  const [busIcon, setBusIcon] = useState(icons.bus);
 
   const requestLocationPermission = async () => {
     const { status } = await Location.requestForegroundPermissionsAsync();
@@ -51,15 +55,18 @@ const Home = () => {
   };
 
   const handleStartTrip = async () => {
-    if (!bus_id) router.replace("./profile");
-    rideStarted = true;
-    console.log("Starting Trip...");
-    setInterval(async () => {
-      const location = await getLocation();
-      if (location && rideStarted) {
-        await sendLocationToBackend(location.latitude, location.longitude);
-      }
-    }, 5000); // Send every 5 seconds
+    if (!bus_id) {
+      router.replace("./profile");
+    } else {
+      rideStarted = true;
+      console.log("Starting Trip...");
+      setInterval(async () => {
+        const location = await getLocation();
+        if (location && rideStarted) {
+          await sendLocationToBackend(location.latitude, location.longitude);
+        }
+      }, 5000); // Send every 5 seconds
+    }
   };
 
   const endTrip = () => {
@@ -87,24 +94,70 @@ const Home = () => {
       setSession(session);
     });
   }, []);
+
+  useEffect(() => {
+    if (busDetails) {
+      if (busDetails.private) {
+        setBusIcon(icons.privateBus);
+      }
+      if (busDetails.bus_type === "Luxury") {
+        setBusIcon(icons.luxuryBus);
+      }
+    }
+  }, [busDetails]);
+
   return (
-    <SafeAreaView className="pt-24 p-5">
-      <Text className="text-2xl font-PoppinsBold">
-        Welcome, {session?.user.user_metadata.name} ! 👋
-      </Text>
-      <View className="mt-10 flex justify-center items-center">
-        <CTA
-          title="Start Trip"
-          className="mb-8 !w-64"
-          onPress={handleStartTrip}
-        />
-        <CTA
-          title="End Trip"
-          className="!w-64"
-          bgVariant="danger"
-          onPress={endTrip}
-        />
+    <SafeAreaView className="flex-1 pt-24 justify-between">
+      <View className="p-5">
+        <Text className="text-2xl font-PoppinsBold">
+          Welcome, {session?.user.user_metadata.name} ! 👋
+        </Text>
+        <View className="mt-10 flex justify-center items-center">
+          <CTA
+            title="Start Trip"
+            className="mb-8 !w-64"
+            onPress={handleStartTrip}
+          />
+          <CTA
+            title="End Trip"
+            className="!w-64"
+            bgVariant="danger"
+            onPress={endTrip}
+          />
+        </View>
       </View>
+
+      {busDetails.active && (
+        <View className="mt-10 bg-white border border-neutral-300 rounded-2xl p-6">
+          <Text className="text-xl font-PoppinsBold">Selected Bus Details</Text>
+          <View className="mt-6 flex-row gap-6">
+            <Image alt="CTB Bus" source={busIcon} className="h-24 w-24" />
+            <View className="flex justify-between">
+              <View className="flex-row justify-between gap-6">
+                <View className="bg-yellow-400 rounded-xl p-2 justify-center">
+                  <Text className="text-xl font-bold">
+                    {busDetails.bus_number}
+                  </Text>
+                </View>
+                <View className="flex-row gap-2 items-center border border-neutral-300 rounded-xl p-2">
+                  <Image
+                    alt="Passenger"
+                    source={icons.users}
+                    className="h-7 w-7"
+                  />
+                  <Text className="text-lg">{busDetails.capacity}</Text>
+                </View>
+              </View>
+              <View className="gap-1 mt-2">
+                <Text className="text-lg">Type: {busDetails.bus_type}</Text>
+                <Text className="text-lg">
+                  {busDetails.private ? "Private" : "CTB"}
+                </Text>
+              </View>
+            </View>
+          </View>
+        </View>
+      )}
     </SafeAreaView>
   );
 };

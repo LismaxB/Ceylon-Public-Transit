@@ -18,6 +18,7 @@ const Profile = () => {
   });
 
   const { setBusId } = useStore();
+  const { setBusDetails } = useStore();
 
   const handleBusForm = async () => {
     if (busData.bus_no === "") return;
@@ -32,7 +33,7 @@ const Profile = () => {
           private: busData.private,
         },
       ])
-      .select("id")
+      .select("*")
       .limit(1);
 
     if (error) {
@@ -40,6 +41,7 @@ const Profile = () => {
       alert("Error inserting data. Please try again.");
     }
     setBusData({ ...busData, bus_id: data ? data[0].id : "" });
+    setBusDetails(data ? data[0] : {});
     setBusId(data ? data[0].id : "");
     router.replace("./home");
   };
