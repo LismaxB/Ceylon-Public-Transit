@@ -1,5 +1,5 @@
 import React from "react";
-import PickerSelect from "react-native-picker-select";
+import { Picker } from "@react-native-picker/picker";
 
 import { SelectorProps } from "@/types/type";
 import { View, Text } from "react-native";
@@ -17,13 +17,20 @@ const Selector = ({
       {placeholder}
     </Text>
     <View className={`border border-neutral-100 rounded-xl ${className}`}>
-      <PickerSelect
-        onValueChange={(value) => onValueChange(value)}
-        items={items}
-        value={selectedValue}
-        placeholder={{ label: placeholder, value: null }}
+      <Picker
+        selectedValue={selectedValue}
+        onValueChange={(itemValue) => onValueChange(itemValue)}
         {...props}
-      />
+      >
+        {items.map(
+          (
+            item: { label: string | undefined; value: string | null },
+            index: React.Key | null | undefined
+          ) => (
+            <Picker.Item key={index} label={item.label} value={item.value} />
+          )
+        )}
+      </Picker>
     </View>
   </View>
 );

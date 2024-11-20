@@ -78,7 +78,7 @@ const Profile = () => {
         <Selector
           placeholder="Select Bus Type"
           className="border-neutral-500"
-          selectedValue={busData.private}
+          selectedValue={busData.private ? "true" : "false"}
           items={[
             { label: "Private", value: "true" },
             { label: "CTB", value: "false" },
