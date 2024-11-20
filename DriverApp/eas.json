@@ -9,11 +9,9 @@
       "distribution": "internal"
     },
     "androidAPK": {
-      "developmentClient": true,
       "distribution": "internal",
       "android": {
-        "buildType": "apk",
-        "gradleCommand": ":app:assembleRelease"
+        "buildType": "apk"
       },
       "env": {
         "EXPO_PUBLIC_SUPABASE_URL": "",
