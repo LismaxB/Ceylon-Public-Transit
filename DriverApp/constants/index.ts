@@ -14,8 +14,8 @@ export const onboarding = [
     },
     {
         id:2,
-        title: "Screen 2",
-        description: "The best way to get around town",
+        title: "Enable Location Services",
+        description: "Allow DriverApp to access your location to continue \n\n Make sure to enable presice location services",
         image: null,
     }
 ];
