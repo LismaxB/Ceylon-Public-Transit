@@ -20,9 +20,14 @@ const Home = () => {
   const [busIcon, setBusIcon] = useState(icons.bus);
 
   const requestLocationPermission = async () => {
-    const { status } = await Location.requestForegroundPermissionsAsync();
-    if (status !== "granted") {
+    const { status: foregroundStatus } =
+      await Location.requestForegroundPermissionsAsync();
+    const { status: backgroundStatus } =
+      await Location.requestBackgroundPermissionsAsync();
+
+    if (foregroundStatus && backgroundStatus !== "granted") {
       console.log("Permission to access location was denied");
+      Alert.alert("Permission to access location was denied! Try Again!");
       return false;
     }
     return true;
@@ -55,6 +60,8 @@ const Home = () => {
   };
 
   const handleStartTrip = async () => {
+    const hasPermission = await requestLocationPermission();
+    if (!hasPermission || rideStarted) return;
     if (!bus_id) {
       router.replace("./profile");
     } else {
