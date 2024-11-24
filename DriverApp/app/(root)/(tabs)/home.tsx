@@ -10,6 +10,8 @@ import { useStore } from "@/store";
 import { router } from "expo-router";
 // import { TripProps } from "@/types/type";
 
+import { sendTripNotification } from "@/utils/notifications";
+
 import { icons } from "@/constants";
 
 const Home = () => {
@@ -67,6 +69,7 @@ const Home = () => {
     } else {
       rideStarted = true;
       console.log("Starting Trip...");
+      sendTripNotification({ bus_no: busDetails.bus_number });
       setInterval(async () => {
         const location = await getLocation();
         if (location && rideStarted) {
