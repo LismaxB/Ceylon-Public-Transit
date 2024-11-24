@@ -1,7 +1,10 @@
 import { Tabs } from "expo-router";
+import React, { useEffect } from "react";
 import { View, Image, ImageSourcePropType } from "react-native";
 
 import { icons } from "@/constants";
+
+import * as Notifications from "expo-notifications";
 
 const TabIcon = ({
   source,
@@ -24,6 +27,26 @@ const TabIcon = ({
 );
 
 export default function RootLayout() {
+  useEffect(() => {
+    // Set notification handler
+    Notifications.setNotificationHandler({
+      handleNotification: async () => ({
+        shouldShowAlert: true,
+        shouldPlaySound: false,
+        shouldSetBadge: false,
+      }),
+    });
+
+    // Request notification permissions
+    const requestPermissions = async () => {
+      const { status } = await Notifications.requestPermissionsAsync();
+      if (status !== "granted") {
+        alert("Permission for notifications is required.");
+      }
+    };
+
+    requestPermissions();
+  }, []);
   return (
     <Tabs
       initialRouteName="index"
