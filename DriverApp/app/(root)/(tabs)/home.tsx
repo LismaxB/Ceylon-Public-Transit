@@ -11,6 +11,7 @@ import { router } from "expo-router";
 // import { TripProps } from "@/types/type";
 
 import { sendTripNotification } from "@/utils/notifications";
+import requestPermissions from "@/services/locationService";
 
 import { icons } from "@/constants";
 
@@ -20,6 +21,8 @@ const Home = () => {
   const { bus_id } = useStore();
   const { busDetails } = useStore();
   const [busIcon, setBusIcon] = useState(icons.bus);
+
+  requestPermissions();
 
   const requestLocationPermission = async () => {
     const { status: foregroundStatus } =
