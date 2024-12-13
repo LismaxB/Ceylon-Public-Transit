@@ -3,35 +3,30 @@ import { useState, useEffect } from "react";
 import debounce from "lodash.debounce";
 
 import styles from "./styles/SearchBar.module.css";
-
-interface SearchResult {
-  id: number;
-  bus_number: string;
-}
+import { DataProps } from "./MapProps";
 
 const SearchBar = () => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [searchResults, setSearchResults] = useState<{
-    buses: SearchResult[];
-    routes: SearchResult[];
-  }>({ buses: [], routes: [] });
+  const [searchResults, setSearchResults] = useState<DataProps[]>([]);
   const [loading, setLoading] = useState(false);
   const [searchInputFocused, setSearchInputFocused] = useState(false);
 
   // Debounced search function
   const fetchSearchResults = debounce(async (query: string) => {
     if (query.trim() === "") {
-      setSearchResults({ buses: [], routes: [] });
+      setSearchResults([]);
       return;
     }
 
     setLoading(true);
 
     try {
-      const response = await fetch(`/api/search?query=${query}`);
+      const response = await fetch(
+        `/api/search?query=${encodeURIComponent(query)}`
+      );
       const data = await response.json();
-      setSearchResults(data);
-      console.log(data, searchResults);
+      setSearchResults(data.results);
+      console.log(data.results);
     } catch (error) {
       console.error("Error fetching search results", error);
     } finally {
@@ -54,22 +49,24 @@ const SearchBar = () => {
         placeholder="Search buses, routes..."
         className={`${styles.searchInput}`}
         onFocus={() => setSearchInputFocused(true)}
-        onBlur={() => setSearchInputFocused(false)}
       />
       <div
         className={styles.searchresults}
         style={{
           display: searchInputFocused && searchQuery ? "block" : "none",
         }}
+        onBlur={() => setSearchInputFocused(false)}
       >
         {loading && <p>Loading...</p>}
         <div>
-          {searchResults.buses.length === 0 ? (
+          {searchResults.length === 0 ? (
             <p>No data found</p>
           ) : (
             <ul>
-              {searchResults.buses.map((bus) => (
-                <li key={bus.id}>{bus.bus_number}</li>
+              {searchResults.map((result, index) => (
+                <li key={index}>
+                  {result.route_name ? result.route_name : result.bus_number}
+                </li>
               ))}
             </ul>
           )}

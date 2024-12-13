@@ -30,3 +30,8 @@ export interface RouteSummary {
   duration: number; // in seconds
   steps: Array<{ instructions: string; distance: number }>;
 }
+
+export interface DataProps{
+  bus_number: string;
+  route_name: string;
+}
