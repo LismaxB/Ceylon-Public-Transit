@@ -23,6 +23,7 @@
     "leaflet-geosearch": "^4.0.0",
     "leaflet-routing-machine": "^3.2.12",
     "leaflet.marker.slideto": "^0.3.0",
+    "lodash.debounce": "^4.0.8",
     "lucide-react": "^0.453.0",
     "next": "14.2.15",
     "react": "^18",
@@ -34,6 +35,7 @@
   },
   "devDependencies": {
     "@types/leaflet": "^1.9.12",
+    "@types/lodash.debounce": "^4.0.9",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

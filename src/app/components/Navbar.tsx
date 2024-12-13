@@ -4,6 +4,8 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import Menu from "./MenuComponent";
 
+import SearchBar from "./SearchBar";
+
 const NavBar = () => {
   return (
     <div className="flex w-full justify-between items-center py-6 px-12 border-b-[1px] border-solid border-[#DDDDDD] max-sm:px-6 max-sm:py-5">
@@ -17,6 +19,7 @@ const NavBar = () => {
           priority={true}
         />
       </Link>
+      <SearchBar />
       <div className="flex gap-6 items-center max-sm:hidden">
         <a href="https://github.com/LismaxB/Ceylon-Public-Transit">
           <svg viewBox="0 0 438.549 438.549" className="h-7 w-7">
