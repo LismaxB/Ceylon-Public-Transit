@@ -8,8 +8,8 @@ on:
   merge_group: {}
   
 env:
-  SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
-  SUPABASE_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}  
+  NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+  NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}  
   
 jobs:
   test:
