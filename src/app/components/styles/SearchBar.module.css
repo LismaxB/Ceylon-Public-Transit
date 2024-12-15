@@ -1,0 +1,38 @@
+.searchbarcontainer {
+  width: 100%;
+  margin: auto;
+  max-width: 850px;
+}
+
+.searchInput {
+  padding: 0.25rem;
+  border: 1px solid #ccc;
+  border-radius: 0.375rem;
+  width: 100%;
+}
+
+.searchresults {
+  position: absolute;
+  background: #fff;
+  width: 100%;
+  max-width: 850px;
+  z-index: 1001;
+  border-radius: 0.375rem;
+  padding: 1rem;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.searchresults ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.searchresults li {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.searchresults h3 {
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+}
