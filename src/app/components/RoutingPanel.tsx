@@ -1,4 +1,5 @@
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import Image from "next/image";
 import L, { LatLngExpression } from "leaflet";
 import "leaflet-routing-machine";
 import { supabase } from "../supabaseClient";
@@ -7,7 +8,7 @@ import { supabase } from "../supabaseClient";
 import { Separator } from "@/components/ui/separator";
 import styles from "./styles/Map.module.css";
 
-import { Users, Clock, Compass } from "lucide-react";
+import { Users, Clock } from "lucide-react";
 import { Bus, RoutingProps, RouteSummary } from "./MapProps";
 
 const markericon = L.icon({
@@ -230,6 +231,43 @@ const RoutingPanel: React.FC<RoutingProps> = ({ map, selectedBus }) => {
             <p className={styles.routeBadge}>Bus Type: {currentBus.bus_type}</p>
           </div>
         </div>
+      )}
+      {!currentBus && (
+        <>
+          <Separator />
+          <div className={styles.busCard} style={{ rowGap: "1rem" }}>
+            <p className="text-center font-bold">
+              Select a bus from the map to view details
+            </p>
+            <div className="flex items-center justify-center gap-x-8">
+              <Image
+                src="/images/icons/bus.webp"
+                alt="Bus"
+                width={40}
+                height={40}
+              />
+              <span>Normal Bus</span>
+            </div>
+            <div className="flex items-center justify-center gap-x-8">
+              <Image
+                src="/images/icons/private_bus.webp"
+                alt="Private Bus"
+                width={40}
+                height={40}
+              />
+              <span>Private Bus</span>
+            </div>
+            <div className="flex items-center justify-center gap-x-8">
+              <Image
+                src="/images/icons/luxury_bus.webp"
+                alt="Luxury Bus"
+                width={40}
+                height={40}
+              />
+              <span>Luxury Bus</span>
+            </div>
+          </div>
+        </>
       )}
       <div className={styles.routingPanelFooter}>
         <Separator />
